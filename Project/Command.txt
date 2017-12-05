@@ -1,0 +1,13 @@
+//key generation
+g++ Key/Key_Generator.cc -lgmpxx -lgmp -o Key/Key_Generator
+Key/./Key_Generator -k 20 -pk Key/pk_file -sk Key/sk_file
+
+//temp command
+g++ SubProtocol/SM.cc -lgmpxx -lgmp -o SubProtocol/SM
+SubProtocol/./SM
+
+g++ SubProtocol/SSED.cc -lgmpxx -lgmp -o SubProtocol/SSED
+SubProtocol/./SSED
+
+g++ SubProtocol/SBD.cc -lgmpxx -lgmp -o SubProtocol/SBD
+SubProtocol/./SBD

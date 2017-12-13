@@ -1,5 +1,8 @@
 #include "SSED.h"
 
+/*
+* In step 1, P1 calculates E(x_i = y_i) values and sends to P2
+*/
 void ssed_step_1(mpz_t** e_uv, mpz_t* e_u, mpz_t* e_v, int size, mpz_t g, mpz_t N) {
 	mpz_t N_, N_sqr;
 	mpz_init_set_str(N_, "1", 10);	
@@ -22,6 +25,9 @@ void ssed_step_1(mpz_t** e_uv, mpz_t* e_u, mpz_t* e_v, int size, mpz_t g, mpz_t 
 	mpz_clear(N_);
 }
 
+/*
+*  P2 calculates E((x_i - y_i)^2) by using secure multiplication subprotocol
+*/
 void ssed_step_2(mpz_t ** e_uv2 , mpz_t*  e_uv, int size, mpz_t g,  mpz_t N, mpz_t mu, mpz_t lambda) {
 	mpz_t* local_e_uv2;
 	local_e_uv2 = new mpz_t[size];
@@ -35,6 +41,9 @@ void ssed_step_2(mpz_t ** e_uv2 , mpz_t*  e_uv, int size, mpz_t g,  mpz_t N, mpz
 	*e_uv2 = local_e_uv2;
 }
 
+/*
+* P1 computes E(|x_i - y_i|^2) by multiplying all E((x_i - y_i)^2)
+*/
 void ssed_step_3(mpz_t ssed , mpz_t*  e_uv2, int size) {
 	mpz_init_set_str(ssed, "1", 10); 
 	for(int i = 0; i<size; i++){

@@ -1,5 +1,8 @@
 #include "SM.h"
 
+/*
+* Simulation of step 1, P1 randomizes a and b by adding random numbers, then send to P2
+*/
 void step_1(mpz_t a_, mpz_t b_, mpz_t e_a, mpz_t e_b, mpz_t r_a, mpz_t r_b, mpz_t g, mpz_t N) {	
 	generate_randomm(r_a, N);
 	generate_randomm(r_b, N);
@@ -16,6 +19,10 @@ void step_1(mpz_t a_, mpz_t b_, mpz_t e_a, mpz_t e_b, mpz_t r_a, mpz_t r_b, mpz_
 	mpz_clear(temp);
 }
 
+/*
+* P2 recipes randomized a and b. decrypt and multiply this two randomizeed number,
+* and encrypts and sends the result to P1
+*/
 void step_2(mpz_t h_, mpz_t a_, mpz_t b_, mpz_t g, mpz_t mu, mpz_t lambda, mpz_t N) {
 	decrypt(a_, a_, N, mu, lambda);
 	decrypt(b_, b_, N, mu, lambda);
@@ -26,6 +33,10 @@ void step_2(mpz_t h_, mpz_t a_, mpz_t b_, mpz_t g, mpz_t mu, mpz_t lambda, mpz_t
 	encrypt(h_, h_, g, N);
 }
 
+/*
+* P1 recieves the multiplication of randomized variables, remove teh randomizaation by
+* subtracting the random variables generated in step 1. Finally gets the E(a*b)
+*/
 void step_3(mpz_t e_ab, mpz_t h_,  mpz_t e_a, mpz_t e_b, mpz_t r_a, mpz_t r_b, mpz_t g, mpz_t N ) {
 	mpz_t temp, N_, one, N_sqr;
 	mpz_init(temp);
@@ -54,6 +65,10 @@ void step_3(mpz_t e_ab, mpz_t h_,  mpz_t e_a, mpz_t e_b, mpz_t r_a, mpz_t r_b, m
 	mpz_clear(one);
 }
 
+/*
+* Secure Multiplication function which take two encryted integer and return the encyted multiplication
+* Here e_a and e_b are the encryted numbers to be multiplied, and e_ab is the encryted multiplication result
+*/
 void secure_multiplication(mpz_t e_ab, mpz_t e_a, mpz_t e_b, mpz_t g, mpz_t N, mpz_t mu, mpz_t lambda){
 	mpz_t a_, b_, r_a, r_b, h_;
 	

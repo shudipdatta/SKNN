@@ -1,11 +1,4 @@
-#include <iostream>
-//#include "../Key/Public_Key.cc"
-//#include "../Key/Private_Key.cc"
-//#include "../Utility/Random_Generator.cc"
-//#include "Paillier.cc"
-#include <gmpxx.h>
-
-using namespace std;
+#include "SBD.h"
 
 void Binary(mpz_t **e_xi, mpz_t x, size_t m) {
 	mpz_t one, two;	
@@ -149,20 +142,24 @@ void SBD(mpz_t** e_xi, mpz_t e_x, size_t m, mpz_t g, mpz_t N, mpz_t mu, mpz_t la
 	*e_xi = re_xi;
 }
 
-/*
-int main (int argc, char *argv[])
-{
+void SBD_tester() {
 	init_pk();
 	init_sk();
 	
 	read_pk();
 	read_sk();
 	
+	
+	FILE* file;
+	if(!(file = fopen("SubProtocol/SBD", "r"))) {
+		fputs("not possible to open file!\n", stderr);
+		exit(1);
+	}	
 	mpz_t* e_xi;
 	mpz_t e_x, x;
 	mpz_init(x);
 	mpz_init(e_x);
-	mpz_init_set_str(x, "10", 10);
+	mpz_inp_str (x, file, 10);
 	encrypt(e_x, x, g, N_pk);
 	
 	size_t m = mpz_sizeinbase(x, 2) ;
@@ -175,14 +172,13 @@ int main (int argc, char *argv[])
 	
 	//testing
 	for(int i=0; i<m; i++) {
-		//gmp_printf ("i & x: %d & %Zd\n", i, e_xi[i]);
 		decrypt(e_xi[i], e_xi[i], N_sk, mu, lambda);
-		gmp_printf ("i & x: %d & %Zd\n", i, e_xi[i]);
+		//gmp_printf ("i & x: %d & %Zd\n", i, e_xi[i]);
+		gmp_printf ("%Zd\n", e_xi[i]);
 	}
+	
+	fclose(file);
 	
 	clear_pk();
 	clear_sk();
-	
-	return 0;
 }
-*/

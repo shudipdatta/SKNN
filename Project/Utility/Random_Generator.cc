@@ -1,8 +1,5 @@
-#include <iostream>
-#include <time.h>
-#include <gmpxx.h>
+#include "Random_Generator.h"
 
-using namespace std;
 /*
 *generate a random number with bit length 'bit_len'. 
 *The random number 'rand' will hold a value in range [0, 2^(bit_len) - 1]

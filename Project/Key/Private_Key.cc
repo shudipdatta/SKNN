@@ -1,8 +1,4 @@
-#include <iostream>
-#include <time.h>
-#include <gmpxx.h>
-
-using namespace std;
+#include "Private_Key.h"
 
 mpz_t lambda, N_sk, mu;
 
@@ -32,6 +28,7 @@ void clear_sk() {
 	mpz_clear(mu);
 	mpz_clear(lambda);
 }
+
 
 void print_sk() {
 	gmp_printf ("%Zd\n", lambda);

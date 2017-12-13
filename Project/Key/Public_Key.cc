@@ -1,8 +1,4 @@
-#include <iostream>
-#include <time.h>
-#include <gmpxx.h>
-
-using namespace std;
+#include "Public_Key.h"
 
 mpz_t  g, N_pk;
 

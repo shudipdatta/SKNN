@@ -1,11 +1,4 @@
-#include <iostream>
-#include "../Key/Public_Key.cc"
-#include "../Key/Private_Key.cc"
-//#include "../Utility/Random_Generator.cc"
-#include "Paillier.cc"
-#include <gmpxx.h>
-
-using namespace std;
+#include "SM.h"
 
 void step_1(mpz_t a_, mpz_t b_, mpz_t e_a, mpz_t e_b, mpz_t r_a, mpz_t r_b, mpz_t g, mpz_t N) {	
 	generate_randomm(r_a, N);
@@ -84,8 +77,8 @@ void secure_multiplication(mpz_t e_ab, mpz_t e_a, mpz_t e_b, mpz_t g, mpz_t N, m
 	mpz_clear(a_);
 	mpz_clear(b_);
 }
-/*
-int main (int argc, char *argv[])
+
+void SM_tester()
 {
 	init_pk();
 	init_sk();
@@ -93,13 +86,21 @@ int main (int argc, char *argv[])
 	read_pk();
 	read_sk();
 	
+	
+	FILE* file;
+	if(!(file = fopen("SubProtocol/SM", "r"))) {
+		fputs("not possible to open file!\n", stderr);
+		exit(1);
+	}	
 	mpz_t a, b, e_a, e_b, e_ab;
 	mpz_init(e_ab);
 	mpz_init(e_a);
 	mpz_init(e_b);
 	
-	mpz_init_set_str(a, "16", 10);
-	mpz_init_set_str(b, "500", 10);
+	mpz_init(a);
+	mpz_init(b);
+	mpz_inp_str (a, file, 10);
+	mpz_inp_str (b, file, 10);
 	
 	encrypt(e_a, a, g, N_pk);
 	encrypt(e_b, b, g, N_pk);
@@ -107,12 +108,10 @@ int main (int argc, char *argv[])
 	secure_multiplication(e_ab, e_a, e_b, g, N_sk, mu, lambda);
 	
 	decrypt(e_ab, e_ab, N_sk, mu, lambda);
-	gmp_printf ("e_ab: %Zd\n", e_ab);
+	gmp_printf ("%Zd\n", e_ab);
 
+	fclose(file);
 	
 	clear_pk();
 	clear_sk();
-	
-	return 0;	
 }
-*/

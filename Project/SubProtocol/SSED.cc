@@ -1,12 +1,4 @@
-#include <iostream>
-//#include "../Key/Public_Key.cc"
-//#include "../Key/Private_Key.cc"
-//#include "../Utility/Random_Generator.cc"
-//#include "Paillier.cc"
-#include "SM.cc"
-#include <gmpxx.h>
-
-using namespace std;
+#include "SSED.h"
 
 void ssed_step_1(mpz_t** e_uv, mpz_t* e_u, mpz_t* e_v, int size, mpz_t g, mpz_t N) {
 	mpz_t N_, N_sqr;
@@ -51,7 +43,7 @@ void ssed_step_3(mpz_t ssed , mpz_t*  e_uv2, int size) {
 }
 
 
-int main (int argc, char *argv[])
+void SSED_tester()
 {
 	init_pk();
 	init_sk();
@@ -59,9 +51,21 @@ int main (int argc, char *argv[])
 	read_pk();
 	read_sk();
 	
+	
+	FILE* file;
+	if(!(file = fopen("SubProtocol/SSED", "r"))) {
+		fputs("not possible to open file!\n", stderr);
+		exit(1);
+	}	
 	mpz_t ssed, *e_uv2, *e_uv, *e_u, *e_v;
 	mpz_init(ssed);
-	int size=3;	
+	int size=0;	
+	
+	while(mpz_inp_str (ssed, file, 10)) {
+		++size;
+	}
+	size /= 2;
+	fclose(file);
 	
 	e_u = new mpz_t[size];
 	e_v = new mpz_t[size];
@@ -75,32 +79,28 @@ int main (int argc, char *argv[])
 		mpz_init2(e_uv2[i], 10);
 	}
 	
-	mpz_init_set_str(e_u[0], "10", 10);
-	mpz_init_set_str(e_u[1], "20", 10);
-	mpz_init_set_str(e_u[2], "30", 10);
-	mpz_init_set_str(e_v[0], "5", 10);	
-	mpz_init_set_str(e_v[1], "10", 10);	
-	mpz_init_set_str(e_v[2], "15", 10);	
+	if(!(file = fopen("SubProtocol/SSED", "r"))) {
+		fputs("not possible to open file!\n", stderr);
+		exit(1);
+	}	
 	
-	encrypt(e_u[0], e_u[0], g, N_sk);
-	encrypt(e_u[1], e_u[1], g, N_sk);
-	encrypt(e_u[2], e_u[2], g, N_sk);
-	encrypt(e_v[0], e_v[0], g, N_sk);
-	encrypt(e_v[1], e_v[1], g, N_sk);
-	encrypt(e_v[2], e_v[2], g, N_sk);
+	for(int i=0; i<size; i++) {
+		mpz_inp_str (e_u[i], file, 10);
+		encrypt(e_u[i], e_u[i], g, N_sk);
+	}
+	for(int i=0; i<size; i++) {
+		mpz_inp_str (e_v[i], file, 10);
+		encrypt(e_v[i], e_v[i], g, N_sk);
+	}
 	
 	ssed_step_1(&e_uv, e_u, e_v, size, g, N_pk);		
-	//decrypt(ssed, e_uv[0], N_sk, mu, lambda);
-	//gmp_printf ("dec(u-v): %Zd\n", ssed);
 	ssed_step_2(&e_uv2, e_uv, size, g, N_sk, mu, lambda);
-	//decrypt(ssed, e_uv2[0], N_sk, mu, lambda);
-	//gmp_printf ("dec((u-v) * (u-v)): %Zd\n", ssed);	
     ssed_step_3(ssed, e_uv2, size);
 	decrypt(ssed, ssed, N_sk, mu, lambda);
-	gmp_printf ("dec(1...m -> (u-v) * (u-v)): %Zd\n", ssed);
+	gmp_printf ("%Zd\n", ssed);
+	
+	fclose(file);
 	
 	clear_pk();
 	clear_sk();
-	
-	return 0;	
 }

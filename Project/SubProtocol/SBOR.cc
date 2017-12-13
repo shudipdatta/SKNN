@@ -1,12 +1,4 @@
-#include <iostream>
-//#include "../Key/Public_Key.cc"
-//#include "../Key/Private_Key.cc"
-//#include "../Utility/Random_Generator.cc"
-//#include "Paillier.cc"
-#include "SM.cc"
-#include <gmpxx.h>
-
-using namespace std;
+#include "SBOR.h"
 
 void secure_bitor (mpz_t e_aorb, mpz_t e_a, mpz_t e_b, mpz_t g, mpz_t N, mpz_t mu, mpz_t lambda) {
 	mpz_t e_ab, N_, N_sqr;
@@ -23,8 +15,7 @@ void secure_bitor (mpz_t e_aorb, mpz_t e_a, mpz_t e_b, mpz_t g, mpz_t N, mpz_t m
 	mpz_mul(e_aorb, e_aorb, e_ab);
 }
 
-int main (int argc, char *argv[])
-{
+void SBOR_tester() {
 	init_pk();
 	init_sk();
 	
@@ -32,10 +23,17 @@ int main (int argc, char *argv[])
 	read_sk();
 	
 	
+	FILE* file;
+	if(!(file = fopen("SubProtocol/SBOR", "r"))) {
+		fputs("not possible to open file!\n", stderr);
+		exit(1);
+	}
 	mpz_t e_a, e_b, e_aorb;
 	mpz_init(e_aorb);
-	mpz_init_set_str(e_a, "1", 10);
-	mpz_init_set_str(e_b, "0", 10);
+	mpz_init(e_a);
+	mpz_init(e_b);
+	mpz_inp_str (e_a, file, 10);
+	mpz_inp_str (e_b, file, 10);
 	encrypt(e_a, e_a, g, N_pk);
 	encrypt(e_b, e_b, g, N_pk);
 	
@@ -43,9 +41,8 @@ int main (int argc, char *argv[])
 	decrypt(e_aorb, e_aorb, N_sk, mu, lambda);
 	gmp_printf("a or b: %Zd\n", e_aorb);
 	
+	fclose(file);
 	
 	clear_pk();
 	clear_sk();
-	
-	return 0;	
 }

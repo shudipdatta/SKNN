@@ -1,22 +1,28 @@
-//key generation
+//compile key generation
 g++ Key/Key_Generator.cc -lgmpxx -lgmp -o Key/Key_Generator
+
+//run key generation with specific key size (20 for example)
 Key/./Key_Generator -k 20 -pk Key/pk_file -sk Key/sk_file
 
-//temp command
-g++ SubProtocol/SM.cc -lgmpxx -lgmp -o SubProtocol/SM
-SubProtocol/./SM
 
-g++ SubProtocol/SSED.cc -lgmpxx -lgmp -o SubProtocol/SSED
-SubProtocol/./SSED
 
-g++ SubProtocol/SBD.cc -lgmpxx -lgmp -o SubProtocol/SBD
-SubProtocol/./SBD
+//compile main
+g++ Main.cc SubProtocol/SMINn.cc SubProtocol/SMIN.cc SubProtocol/Paillier.cc SubProtocol/SBD.cc SubProtocol/SM.cc SubProtocol/SMIN.h SubProtocol/SSED.cc SubProtocol/SBOR.cc Utility/Random_Generator.cc Key/Private_Key.cc Key/Public_Key.cc -lgmpxx -lgmp -o Main
 
-g++ SubProtocol/SBOR.cc -lgmpxx -lgmp -o SubProtocol/SBOR
-SubProtocol/./SBOR
+//run main with different subprotocol (any one)
+./Main SBD
+./Main SBOR
+./Main SM
+./Main SSED
+./Main SMIN
+./Main SMINn
 
-g++ SubProtocol/SMIN.cc -lgmpxx -lgmp -o SubProtocol/SMIN
-SubProtocol/./SMIN
 
-g++ SubProtocol/SMINn.cc -lgmpxx -lgmp -o SubProtocol/SMINn
-SubProtocol/./SMINn
+
+
+
+
+
+
+
+

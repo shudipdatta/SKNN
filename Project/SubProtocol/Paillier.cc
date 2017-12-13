@@ -1,8 +1,4 @@
-#include <iostream>
-#include "../Utility/Random_Generator.cc"
-#include <gmpxx.h>
-
-using namespace std;
+#include "Paillier.h"
 
 /*
 *encrypting 'msg' into 'cipher' using paillier homomorphic encryption

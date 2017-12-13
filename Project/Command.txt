@@ -11,3 +11,12 @@ SubProtocol/./SSED
 
 g++ SubProtocol/SBD.cc -lgmpxx -lgmp -o SubProtocol/SBD
 SubProtocol/./SBD
+
+g++ SubProtocol/SBOR.cc -lgmpxx -lgmp -o SubProtocol/SBOR
+SubProtocol/./SBOR
+
+g++ SubProtocol/SMIN.cc -lgmpxx -lgmp -o SubProtocol/SMIN
+SubProtocol/./SMIN
+
+g++ SubProtocol/SMINn.cc -lgmpxx -lgmp -o SubProtocol/SMINn
+SubProtocol/./SMINn

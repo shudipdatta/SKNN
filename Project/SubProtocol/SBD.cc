@@ -1,8 +1,8 @@
 #include <iostream>
-#include "../Key/Public_Key.cc"
-#include "../Key/Private_Key.cc"
+//#include "../Key/Public_Key.cc"
+//#include "../Key/Private_Key.cc"
 //#include "../Utility/Random_Generator.cc"
-#include "Paillier.cc"
+//#include "Paillier.cc"
 #include <gmpxx.h>
 
 using namespace std;
@@ -119,8 +119,9 @@ void SBD(mpz_t** e_xi, mpz_t e_x, size_t m, mpz_t g, mpz_t N, mpz_t mu, mpz_t la
 	mpz_init(temp);
 	mpz_init_set_str(two, "2", 10);
 	
-	mpz_t* le_xi;
+	mpz_t *le_xi, *re_xi;
 	le_xi = new mpz_t[m];
+	re_xi = new mpz_t[m];
 	
 	mpz_t N_, N_sqr;
 	mpz_init_set_str(N_, "1", 10);	
@@ -133,6 +134,7 @@ void SBD(mpz_t** e_xi, mpz_t e_x, size_t m, mpz_t g, mpz_t N, mpz_t mu, mpz_t la
 		mpz_set(T, e_x);
 		for(int i=0; i<m; i++) {
 			mpz_init2(le_xi[i], 10);
+			mpz_init2(re_xi[i], 10);
 			Encrypted_LSB(le_xi[i], T, g, N); 
 			mpz_powm(temp, le_xi[i], N_, N_sqr);
 			mpz_mul(Z, T, temp);
@@ -140,9 +142,14 @@ void SBD(mpz_t** e_xi, mpz_t e_x, size_t m, mpz_t g, mpz_t N, mpz_t mu, mpz_t la
 		}
 		SVR(lamb, e_x, le_xi, m, g, N, mu, lambda);
 	} while (!lamb);
-	*e_xi = le_xi;
+	//*e_xi = le_xi;
+	for(int i=0; i<m; i++) {
+		mpz_set(re_xi[i], le_xi[m-i-1]);
+	}
+	*e_xi = re_xi;
 }
 
+/*
 int main (int argc, char *argv[])
 {
 	init_pk();
@@ -155,33 +162,27 @@ int main (int argc, char *argv[])
 	mpz_t e_x, x;
 	mpz_init(x);
 	mpz_init(e_x);
-	mpz_init_set_str(x, "9", 10);
+	mpz_init_set_str(x, "10", 10);
 	encrypt(e_x, x, g, N_pk);
 	
-	size_t m = mpz_sizeinbase(x, 2);
+	size_t m = mpz_sizeinbase(x, 2) ;
 	e_xi = new mpz_t[m];
 	for(int i=0; i<m-1; i++) {
 			mpz_init2(e_xi[i], 10);
 	}
-	/*
-	Binary(&e_xi, x, m);
-	for(int i=0; i<m; i++) {
-		gmp_printf ("i & x: %d & %Zd\n", i, e_xi[i]);
-		//encrypt(e_xi[i], e_xi[i], g, N_pk);
-		//gmp_printf ("i & x: %d & %Zd\n", i, e_xi[i]);
-	}
-	*/
+	
 	SBD(&e_xi, e_x, m, g, N_pk, mu, lambda);
-	///*
+	
 	//testing
 	for(int i=0; i<m; i++) {
 		//gmp_printf ("i & x: %d & %Zd\n", i, e_xi[i]);
 		decrypt(e_xi[i], e_xi[i], N_sk, mu, lambda);
 		gmp_printf ("i & x: %d & %Zd\n", i, e_xi[i]);
 	}
-	//*/
+	
 	clear_pk();
 	clear_sk();
 	
 	return 0;
 }
+*/

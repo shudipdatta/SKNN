@@ -1,5 +1,10 @@
 #include "SMIN.h"
 
+/* 
+* Step 1 of Secure minimum calculation. P1 receives the bit decomposed variables e_ui and e_vi.
+* this function produces L and gamma values. L is used to compare two variables and gamm is use
+* to calculate the E(min(a,b))
+*/
 void smin_step_1(mpz_t** L , mpz_t**  Gam, mpz_t** r, mpz_t f, size_t m, mpz_t* e_ui, mpz_t* e_vi, mpz_t g, mpz_t N, mpz_t mu, mpz_t lambda) {
 	mpz_t e_uvi, H, G, phi, W, N_, N__, N_sqr, _one, temp;
 	mpz_init(e_uvi);
@@ -82,6 +87,12 @@ void smin_step_1(mpz_t** L , mpz_t**  Gam, mpz_t** r, mpz_t f, size_t m, mpz_t* 
 	*r = l_r;
 }
 
+/*
+* P2 receives permuted L and Gamma values from P1
+* then first it decrypts and checks L. If there is any single bit set to 1,
+* it set alpha = 1, otherwise alpha is set to 0. Alpha is used to compare
+* This function also returns M = Gamma^alpha and E(alpha) to P1
+*/
 void smin_step_2(mpz_t** M , mpz_t e_alp, size_t m, mpz_t* Gam, mpz_t* L, mpz_t g,  mpz_t N, mpz_t mu, mpz_t lambda) {
 	mpz_t temp, one, N_sqr;
 	mpz_init(temp);
@@ -113,6 +124,9 @@ void smin_step_2(mpz_t** M , mpz_t e_alp, size_t m, mpz_t* Gam, mpz_t* L, mpz_t 
 	*M = l_M;
 }
 
+/*
+* After receiving Gamma^alpha and E(alpha) from P2, P1 calculates the E(min(a,b)) in this step
+*/
 void smin_step_3(mpz_t** e_mini , mpz_t*  M, mpz_t* r, mpz_t e_alp, size_t m, mpz_t f, mpz_t* e_ui, mpz_t* e_vi, mpz_t N) {
 	mpz_t temp, lamb, N_sqr;
 	mpz_init(temp);

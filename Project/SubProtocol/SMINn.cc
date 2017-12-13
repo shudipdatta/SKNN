@@ -1,5 +1,8 @@
 #include "SMINn.h"
 
+/*
+* Calculate the E(min(a_1,a_2, ..., a_i)): the encrypted minimum number out of n encrypted entries
+*/
 void SMINn(mpz_t **dmin, mpz_t **di, size_t n, size_t m, mpz_t g, mpz_t N, mpz_t mu, mpz_t lambda) {
 	size_t num;
 	num = n;
